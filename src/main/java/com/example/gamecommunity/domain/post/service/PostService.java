@@ -50,10 +50,12 @@ public class PostService {
 	}
 
 	// 4. 게시글 삭제
+	@Transactional
+	public void deletePost(Long postId) {
 
+		Post post = entityFetcher.getPostOrThrow(postId);
 
-
-
-
+		postRepository.delete(post);
+	}
 
 }

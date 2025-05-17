@@ -1,5 +1,6 @@
 package com.example.gamecommunity.domain.post.controller;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,10 +41,12 @@ public class PostController {
 	// }
 
 	// 4. 게시글 삭제
-
-
-
-
-
+	// @DeleteMapping("/posts/{postId}")
+	// public CommonResponse<Void> deletePost(@PathVariable Long postId) {
+	//
+	// 	postService.deletePost(postId);
+	//
+	// 	return CommonResponse.of(SuccessCode.DELETE_POST_SUCCESS);
+	// }
 
 }
