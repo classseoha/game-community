@@ -41,6 +41,13 @@ public class PostService {
 	// 2. 게시글 목록 조회
 
 	// 3. 게시글 수정
+	@Transactional
+	public void editPost(Long postId ,PostRequestDto postRequestDto) {
+
+		Post post = entityFetcher.getPostOrThrow(postId);
+
+		post.update(postRequestDto.getTitle(), postRequestDto.getContent());
+	}
 
 	// 4. 게시글 삭제
 

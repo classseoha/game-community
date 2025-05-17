@@ -1,5 +1,6 @@
 package com.example.gamecommunity.domain.post.controller;
 
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,13 @@ public class PostController {
 	// 2. 게시글 목록 조회
 
 	// 3. 게시글 수정
-
+	// @PatchMapping("/posts/{postId}")
+	// public CommonResponse<Void> updatePost(@RequestBody PostRequestDto postRequestDto) {
+	//
+	// 	postService.editPost(postRequestDto);
+	//
+	// 	return CommonResponse.of(SuccessCode.UPDATE_POST_SUCCESS);
+	// }
 
 	// 4. 게시글 삭제
 
