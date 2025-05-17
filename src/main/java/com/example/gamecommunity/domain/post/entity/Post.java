@@ -3,6 +3,7 @@ package com.example.gamecommunity.domain.post.entity;
 import com.example.gamecommunity.common.entity.BaseEntity;
 import com.example.gamecommunity.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,7 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Builder
     public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
