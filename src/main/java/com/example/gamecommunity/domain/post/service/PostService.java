@@ -21,9 +21,10 @@ public class PostService {
 
 	// 1. 게시글 생성
 	@Transactional
-	public PostResponseDto savePost(Long userId, PostRequestDto postRequestDto) {
+	public PostResponseDto savePost(String token, PostRequestDto postRequestDto) {
 
-		// 임시로 일단 유저 ID 로 유저 객체 찾기
+		Long userId = jwtUtil.getUserIdFromToken(token);
+
 		User user = entityFetcher.getUserOrThrow(userId);
 
 		Post post = Post.builder()
@@ -42,7 +43,7 @@ public class PostService {
 
 	// 3. 게시글 수정
 	@Transactional
-	public void editPost(Long postId ,PostRequestDto postRequestDto) {
+	public void editPost(Long postId, String token, PostRequestDto postRequestDto) {
 
 		Post post = entityFetcher.getPostOrThrow(postId);
 
@@ -51,7 +52,7 @@ public class PostService {
 
 	// 4. 게시글 삭제
 	@Transactional
-	public void deletePost(Long postId) {
+	public void deletePost(Long postId, String token) {
 
 		Post post = entityFetcher.getPostOrThrow(postId);
 
