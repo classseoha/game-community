@@ -47,7 +47,7 @@ public class PostController {
 		return CommonResponse.of(SuccessCode.GET_ALL_POSTS_SUCCESS, postService.getAllPosts(postId));
 	}
 
-	// 3. 게시글 검색 조회
+	// 3. v1 게시글 검색 조회
 	@GetMapping("/v1/posts/search")
 	public CommonResponse<Page<PostResponseDto>> v1searchPost(
 		@RequestParam("keyword") String title,
@@ -56,10 +56,13 @@ public class PostController {
 			return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS, postService.searchPostByTitle(title, pageable));
 	}
 
-	// 4. 캐시 기반 게시글 검색 조회
+	// 4. v2 게시글 검색 조회 (캐시 기반)
 	@GetMapping("/v2/posts/search")
-	public CommonResponse v2searchPost() {
+	public CommonResponse<Page<PostResponseDto>> v2searchPostWithCache(
+		@RequestParam("keyword") String title,
+		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
+			return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS, postService.searchPostByTitleWithCache(title, pageable));
 	}
 
 	// 5. 게시글 수정
