@@ -48,7 +48,7 @@ public class PostController {
 	}
 
 	// 3. 게시글 검색 조회
-	@GetMapping("/posts/search")
+	@GetMapping("/v1/posts/search")
 	public CommonResponse<Page<PostResponseDto>> searchPost(
 		@RequestParam("keyword") String title,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
