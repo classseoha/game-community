@@ -49,14 +49,20 @@ public class PostController {
 
 	// 3. 게시글 검색 조회
 	@GetMapping("/v1/posts/search")
-	public CommonResponse<Page<PostResponseDto>> searchPost(
+	public CommonResponse<Page<PostResponseDto>> v1searchPost(
 		@RequestParam("keyword") String title,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
 			return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS, postService.searchPostByTitle(title, pageable));
 	}
 
-	// 4. 게시글 수정
+	// 4. 캐시 기반 게시글 검색 조회
+	@GetMapping("/v2/posts/search")
+	public CommonResponse v2searchPost() {
+
+	}
+
+	// 5. 게시글 수정
 	@PatchMapping("/posts/{id}")
 	public CommonResponse<Void> updatePost(
 		@PathVariable Long id,
@@ -68,7 +74,7 @@ public class PostController {
 		return CommonResponse.of(SuccessCode.UPDATE_POST_SUCCESS);
 	}
 
-	// 5. 게시글 삭제
+	// 6. 게시글 삭제
 	@DeleteMapping("/posts/{id}")
 	public CommonResponse<Void> deletePost(
 		@PathVariable Long id,

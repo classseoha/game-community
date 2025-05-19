@@ -1,11 +1,12 @@
 package com.example.gamecommunity.domain.post.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.gamecommunity.common.util.EntityFetcher;
 import com.example.gamecommunity.domain.post.dto.request.PostRequestDto;
@@ -14,7 +15,6 @@ import com.example.gamecommunity.domain.post.entity.Post;
 import com.example.gamecommunity.domain.post.repository.PostRepository;
 import com.example.gamecommunity.domain.user.entity.User;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -45,7 +45,7 @@ public class PostService {
 	}
 
 	// 2. 게시글 목록 조회
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<PostResponseDto> getAllPosts(Long postId) {
 
 		List<Post> postList = postRepository.findAllById(postId);
@@ -58,7 +58,21 @@ public class PostService {
 	}
 
 	// 3. 게시글 검색 조회
+	@Transactional(readOnly = true)
 	public Page<PostResponseDto> searchPostByTitle(String title, Pageable pageable) {
+
+		return postRepository.findAllByTitleContaining(title, pageable)
+			.map(PostResponseDto::new);
+	}
+
+	// 4. 캐시 기반 게시글 검색 조회
+	@Transactional(readOnly = true)
+	@Cacheable(value = "searchPost", key = "#title")
+	/*
+	검색할 때 세부 설정 넣는 방법
+	@Cacheable(value = "searchPosts", key = "#title + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+	 */
+	public Page<PostResponseDto> searchPostByTitleWithCache(String title, Pageable pageable) {
 
 		return postRepository.findAllByTitleContaining(title, pageable)
 			.map(PostResponseDto::new);
