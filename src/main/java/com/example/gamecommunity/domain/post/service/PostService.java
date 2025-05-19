@@ -3,6 +3,8 @@ package com.example.gamecommunity.domain.post.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.gamecommunity.common.util.EntityFetcher;
@@ -55,7 +57,14 @@ public class PostService {
 		return postResponseDtoList;
 	}
 
-	// 3. 게시글 수정
+	// 3. 게시글 검색 조회
+	public Page<PostResponseDto> searchPostByTitle(String title, Pageable pageable) {
+
+		return postRepository.findAllByTitleContaining(title, pageable)
+			.map(PostResponseDto::new);
+	}
+
+	// 4. 게시글 수정
 	@Transactional
 	public void editPost(Long postId, String token, PostRequestDto postRequestDto) {
 
@@ -64,7 +73,7 @@ public class PostService {
 		post.update(postRequestDto.getTitle(), postRequestDto.getContent());
 	}
 
-	// 4. 게시글 삭제
+	// 5. 게시글 삭제
 	@Transactional
 	public void deletePost(Long postId, String token) {
 
