@@ -1,6 +1,9 @@
 package com.example.gamecommunity.domain.post.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +36,11 @@ public class PostController {
 	}
 
 	// 2. 게시글 목록 조회
+	@GetMapping("/posts")
+	public CommonResponse<List<PostResponseDto>> getPostList(Long postId) {
+
+		return CommonResponse.of(SuccessCode.GET_ALL_POSTS_SUCCESS, postService.getAllPosts(postId));
+	}
 
 	// 3. 게시글 수정
 	@PatchMapping("/posts/{id}")

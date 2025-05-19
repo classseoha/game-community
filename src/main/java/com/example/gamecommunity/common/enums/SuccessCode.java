@@ -9,7 +9,7 @@ public enum SuccessCode implements BaseCode {
 
     // Post
     CREATE_POST_SUCCESS(HttpStatus.CREATED, "게시글이 생성되었습니다."),
-    GET_ALL_POST_SUCCESS(HttpStatus.OK, "게시글 목록을 조회합니다."),
+    GET_ALL_POSTS_SUCCESS(HttpStatus.OK, "게시글 목록을 조회합니다."),
     UPDATE_POST_SUCCESS(HttpStatus.OK,"게시글을 수정했습니다."),
     DELETE_POST_SUCCESS(HttpStatus.OK, "게시글을 삭제했습니다.");
 

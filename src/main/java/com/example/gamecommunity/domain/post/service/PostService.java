@@ -1,5 +1,8 @@
 package com.example.gamecommunity.domain.post.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.example.gamecommunity.common.util.EntityFetcher;
@@ -40,6 +43,17 @@ public class PostService {
 	}
 
 	// 2. 게시글 목록 조회
+	@Transactional
+	public List<PostResponseDto> getAllPosts(Long postId) {
+
+		List<Post> postList = postRepository.findAllById(postId);
+
+		List<PostResponseDto> postResponseDtoList = postList.stream()
+			.map(post -> new PostResponseDto(post))
+			.toList();
+
+		return postResponseDtoList;
+	}
 
 	// 3. 게시글 수정
 	@Transactional
