@@ -15,7 +15,7 @@ public enum ErrorCode implements BaseCode {
     NOT_EXIST_COOKIE(HttpStatus.NOT_FOUND, "쿠키가 존재하지 않습니다."),
 
     // Post
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다.");
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

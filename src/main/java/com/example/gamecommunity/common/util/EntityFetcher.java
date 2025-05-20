@@ -20,13 +20,13 @@ public class EntityFetcher {
 
     // User
     public User getUserOrThrow(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
-    // Schedule
+    // Post
     public Post getPostOrThrow(Long postId) {
-        return postRepository.findById(postId)
+        return postRepository.findPostById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
 
