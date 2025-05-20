@@ -2,7 +2,16 @@ package com.example.gamecommunity.domain.post.entity;
 
 import com.example.gamecommunity.common.entity.BaseEntity;
 import com.example.gamecommunity.domain.user.entity.User;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,27 +21,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Post extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String title;
+	private String title;
 
-    private String contents;
+	private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User users;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    public Post(String title, String contents, User users) {
-        this.title = title;
-        this.contents = contents;
-        this.users = users;
-    }
+	@Builder
+	public Post(String title, String content, User user) {
+		this.title = title;
+		this.content = content;
+		this.user = user;
+	}
 
-    public void update(String title, String contents) {
-        this.title = title;
-        this.contents = contents;
-    }
+	public void update(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
 
 }

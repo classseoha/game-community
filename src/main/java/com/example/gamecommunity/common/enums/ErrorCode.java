@@ -9,7 +9,7 @@ public enum ErrorCode implements BaseCode {
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST,"입력한 값의 형식이 잘못되었습니다."),
 
     // Post
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다.");
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
