@@ -29,26 +29,23 @@ public class HotPostService {
     private final RedisTemplate<String, Object> redisTemplate;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    @Transactional
-    public HotPostResponseDto save(Long userId, HotPostRequestDto requestDto) {
-        User user = entityFetcher.getUserOrThrow(userId);
-        Post post = new Post(requestDto.getTitle(), requestDto.getContents(), user);
-        Post savedPost = postRepository.save(post);
-        return HotPostResponseDto.from(savedPost);
-    }
 
     /**
      * 키워드를 통한 게시글 리스트 반환
-     * key : "search:result:keyword"
-     * value : List<Post>
+     * key : "search:result:{keyword}"
+     * value : List<HotPostResponseDto>
      * TTL : 10분
      * Look - Aside 전략 사용
      */
+    @Transactional(readOnly = true)
     public List<HotPostResponseDto> find(String keyword) {
         keyword = getKeyword(keyword);
         String key = "search:result:" + keyword;
+        System.out.println("keyword = " + keyword);
+        System.out.println("redis key = search:result:" + keyword);
 
         Object cached = redisTemplate.opsForValue().get(key);
+        System.out.println("cached = " + cached);
 
         // 캐시 조회
         if (cached != null) {
@@ -58,6 +55,7 @@ public class HotPostService {
 
         // 캐시에 존재하지 않을 경우 DB 조회
         List<Post> postList = postRepository.findByTitleContaining(keyword);
+        System.out.println("postList.size() = " + postList.size());
         List<HotPostResponseDto> dtoList = postList.stream().map(HotPostResponseDto::from).toList();
 
         // Redis에 데이터 저장, TTL 설정 - 10분
@@ -74,6 +72,7 @@ public class HotPostService {
      * score : +1
      * TTL : 1일
      */
+    @Transactional(readOnly = true)
     public void recodeKeyword(String keyword) {
         keyword = getKeyword(keyword);
         String key = "search:rank:" + LocalDate.now().format(FORMATTER);
@@ -83,6 +82,7 @@ public class HotPostService {
             redisTemplate.expire(key, Duration.ofDays(1));
         }
 
+        // Sorted Set 관련 메서드
         redisTemplate.opsForZSet().incrementScore(key, keyword, 1);
     }
 
@@ -91,8 +91,8 @@ public class HotPostService {
      * key : "search:rank:20250520"
      * value : "keyword"
      *
-     * @return
      */
+    @Transactional(readOnly = true)
     public List<KeywordDto> getKeywords() {
         String key = "search:rank:" + LocalDate.now().format(FORMATTER);
         Set<Object> topKeywordSet = redisTemplate.opsForZSet().reverseRange(key, 0, 9);
