@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 public class HotPostResponseDto {
 
     private String title;
-    private String contents;
+    private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public HotPostResponseDto(String title, String contents, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public HotPostResponseDto(String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.title = title;
-        this.contents = contents;
+        this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -23,7 +23,7 @@ public class HotPostResponseDto {
     public static HotPostResponseDto from(Post post) {
         return new HotPostResponseDto(
                 post.getTitle(),
-                post.getContents(),
+                post.getContent(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );
