@@ -1,6 +1,7 @@
 package com.example.gamecommunity.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +44,7 @@ public class RedisConfigure {
         ObjectMapper objectMapper = new ObjectMapper();
         // LocalDateTime 타입이 포함된 객체(Post)를 직렬화해 저장하기 위함
         objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         // objectMapper 를 GenericJackson2JsonRedisSerializer에 적용
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
 
