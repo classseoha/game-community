@@ -32,7 +32,8 @@ public class PostController {
 
 	// 1. 게시글 생성
 	@PostMapping("/{userId}/posts")
-	public CommonResponse<PostResponseDto> createPost(@PathVariable Long userId, @RequestBody @Valid PostRequestDto postRequestDto) {
+	public CommonResponse<PostResponseDto> createPost(@PathVariable Long userId,
+		@RequestBody @Valid PostRequestDto postRequestDto) {
 
 		return CommonResponse.of(SuccessCode.CREATE_POST_SUCCESS, postService.savePost(userId, postRequestDto));
 	}
@@ -50,7 +51,7 @@ public class PostController {
 		@RequestParam("keyword") String title,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-			return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS, postService.searchPostByTitle(title, pageable));
+		return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS, postService.searchPostByTitle(title, pageable));
 	}
 
 	// 4. 게시글 검색 조회 v2 (캐시 기반)
@@ -59,7 +60,8 @@ public class PostController {
 		@RequestParam("keyword") String title,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-			return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS, postService.searchPostByTitleWithCache(title, pageable));
+		return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS,
+			postService.searchPostByTitleWithCache(title, pageable));
 	}
 
 	// 5. 게시글 수정
