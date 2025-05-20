@@ -1,6 +1,7 @@
 package com.example.gamecommunity.domain.post.repository;
 
 import com.example.gamecommunity.domain.post.entity.Post;
+import com.example.gamecommunity.domain.user.entity.User;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	Optional<Post> findPostById(Long id);
 
-	List<Post> findAllById(Long id);
+	List<Post> findAllByUser(User user);
 
 	/*
 	페이징 적용하는 방법:

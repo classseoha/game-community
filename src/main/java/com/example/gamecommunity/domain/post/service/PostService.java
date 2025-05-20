@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.gamecommunity.common.enums.ErrorCode;
+import com.example.gamecommunity.common.exception.CustomException;
 import com.example.gamecommunity.common.util.EntityFetcher;
 import com.example.gamecommunity.domain.post.dto.request.PostRequestDto;
 import com.example.gamecommunity.domain.post.dto.response.PostResponseDto;
@@ -26,9 +28,7 @@ public class PostService {
 
 	// 1. 게시글 생성
 	@Transactional
-	public PostResponseDto savePost(String token, PostRequestDto postRequestDto) {
-
-		Long userId = jwtUtil.getUserIdFromToken(token);
+	public PostResponseDto savePost(Long userId, PostRequestDto postRequestDto) {
 
 		User user = entityFetcher.getUserOrThrow(userId);
 
@@ -38,17 +38,23 @@ public class PostService {
 			.user(user)
 			.build();
 
-		postRepository.save(post);
+		Post savedPost = postRepository.save(post);
 
-		return new PostResponseDto(post);
+		return new PostResponseDto(savedPost);
 
 	}
 
 	// 2. 게시글 목록 조회
 	@Transactional(readOnly = true)
-	public List<PostResponseDto> getAllPosts(Long postId) {
+	public List<PostResponseDto> getAllPosts(Long userId) {
 
-		List<Post> postList = postRepository.findAllById(postId);
+		User user = entityFetcher.getUserOrThrow(userId);
+
+		List<Post> postList = postRepository.findAllByUser(user);
+
+		if(postList.isEmpty()) {
+			throw new CustomException(ErrorCode.POST_NOT_FOUND, "게시글을 찾을 수 없습니다.");
+		}
 
 		List<PostResponseDto> postResponseDtoList = postList.stream()
 			.map(post -> new PostResponseDto(post))
@@ -57,7 +63,7 @@ public class PostService {
 		return postResponseDtoList;
 	}
 
-	// 3. 게시글 검색 조회
+	// 3. 게시글 검색 조회 v1
 	@Transactional(readOnly = true)
 	public Page<PostResponseDto> searchPostByTitle(String title, Pageable pageable) {
 
@@ -65,7 +71,7 @@ public class PostService {
 			.map(PostResponseDto::new);
 	}
 
-	// 4. 캐시 기반 게시글 검색 조회
+	// 4. 게시글 검색 조회 v2 (캐시 기반)
 	@Transactional(readOnly = true)
 	@Cacheable(value = "searchPost", key = "#title")
 	/*
@@ -80,7 +86,7 @@ public class PostService {
 
 	// 4. 게시글 수정
 	@Transactional
-	public void editPost(Long postId, String token, PostRequestDto postRequestDto) {
+	public void editPost(Long postId, PostRequestDto postRequestDto) {
 
 		Post post = entityFetcher.getPostOrThrow(postId);
 
@@ -89,7 +95,7 @@ public class PostService {
 
 	// 5. 게시글 삭제
 	@Transactional
-	public void deletePost(Long postId, String token) {
+	public void deletePost(Long postId) {
 
 		Post post = entityFetcher.getPostOrThrow(postId);
 
