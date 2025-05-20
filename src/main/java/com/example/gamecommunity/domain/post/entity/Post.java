@@ -18,6 +18,7 @@ public class Post extends BaseEntity {
 
     private String title;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)

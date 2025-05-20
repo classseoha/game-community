@@ -55,21 +55,28 @@ public class PostInsertJobConfig { // Batch Job에 대해 설정하는 클래스
     }
 
     @Bean
-    public ItemReader<Post> postItemReader() { // Reader 정의 메서드
-
-        return new ItemReader<>() { // 1개씩 Post 데이터를 생성해서 반환
-            private final Faker faker = new Faker(); // 가짜 제목, 내용 생성
+    public ItemReader<Post> postItemReader() {
+        return new ItemReader<>() {
+            private final Faker faker = new Faker();
             private final Random random = new Random();
             private int count = 0;
-            private final List<User> userList = userRepository.findAll(); // 미리 전체 유저 목록를 가져와서 랜덤으로 Post의 작성자로 지정
+            private List<User> userList = null;
 
             @Override
-            public Post read() { // 총 100만 개 까지 생성하도록 제한
+            public Post read() {
+                if (userList == null) {
+                    userList = userRepository.findAll();
+                    if (userList.isEmpty()) {
+                        throw new IllegalStateException("유저가 없습니다. UserSeeder가 먼저 실행되어야 합니다.");
+                    }
+                    System.out.println("✅ 유저 수: " + userList.size());
+                }
+
                 if (count >= TOTAL_COUNT) return null;
 
                 String title = faker.book().title();
                 String contents = faker.lorem().paragraph();
-                User user = userList.get(random.nextInt(userList.size())); // 랜덤 연결
+                User user = userList.get(random.nextInt(userList.size()));
                 count++;
 
                 return new Post(title, contents, user);
