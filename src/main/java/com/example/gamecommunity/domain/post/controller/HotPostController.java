@@ -30,7 +30,6 @@ public class HotPostController {
 
     @GetMapping("/toptopic")
     public CommonResponse<List<KeywordDto>> getKeywords() {
-
         return CommonResponse.of(GET_POPULAR_KEYWORDS_SUCCESS, hotPostService.getKeywords());
     }
 }
