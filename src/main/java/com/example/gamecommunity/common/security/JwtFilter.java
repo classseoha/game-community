@@ -20,10 +20,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) throws ServletException, IOException {
+		FilterChain filterChain) throws ServletException, IOException { 
 		String url = request.getRequestURI();
 
-		if (url.startsWith("/auth")) {
+		if (url.equals("/auth/login") || url.equals("/users/signup")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
