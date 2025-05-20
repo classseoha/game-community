@@ -4,6 +4,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.gamecommunity.common.enums.ErrorCode;
+import com.example.gamecommunity.common.exception.CustomException;
+import com.example.gamecommunity.common.util.EntityFetcher;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserRequestDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserUpdateRequestDto;
 import com.example.gamecommunity.domain.user.dto.responsedto.UserResponseDto;
@@ -18,6 +21,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final EntityFetcher entityFetcher;
 
 	@Transactional
 	public UserResponseDto registerUser(UserRequestDto userRequestDto) {
@@ -36,9 +40,9 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserResponseDto updateUser(Long id, UserUpdateRequestDto userUpdateRequestDto) {
+	public UserResponseDto updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto) {
 
-		User findUser = userRepository.findByIdOrElseThrow(id);
+		User findUser = entityFetcher.getUserOrThrow(userId);
 
 		if (userUpdateRequestDto.getPassword() != null && !userUpdateRequestDto.getPassword().isEmpty()) {
 			String encodedPassword = passwordEncoder.encode(userUpdateRequestDto.getPassword());
@@ -53,9 +57,9 @@ public class UserService {
 	}
 
 	@Transactional
-	public void delete(Long id) {
+	public void delete(Long userId) {
 
-		User findUser = userRepository.findByIdOrElseThrow(id);
+		User findUser = entityFetcher.getUserOrThrow(userId);
 
 		userRepository.delete(findUser);
 	}

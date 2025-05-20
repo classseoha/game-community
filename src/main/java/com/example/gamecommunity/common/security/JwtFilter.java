@@ -2,13 +2,16 @@ package com.example.gamecommunity.common.security;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -44,28 +47,20 @@ public class JwtFilter extends OncePerRequestFilter {
 				return;
 			}
 
-			request.setAttribute("userId", Long.parseLong(claims.getSubject()));
-			request.setAttribute("email", claims.get("email"));
-			request.setAttribute("nickname", claims.get("nickname"));
+			// request.setAttribute("userId", Long.parseLong(claims.getSubject()));
+			// request.setAttribute("email", claims.get("email"));
+			// request.setAttribute("nickname", claims.get("nickname"));
+
+			Authentication authentication = new UsernamePasswordAuthenticationToken(
+				claims.getSubject(), null, List.of()
+			);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			filterChain.doFilter(request, response);
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "유효하지 않은 JWT 토큰입니다.");
 		}
-	}
-
-		private String getTokenFromCookies(HttpServletRequest request){
-			Cookie[] cookies = request.getCookies();
-			if (cookies == null) {
-				return null;
-			}
-
-			return Arrays.stream(cookies)
-				.filter(cookie -> "token".equals(cookie.getName()))
-				.map(Cookie::getValue)
-				.findFirst()
-				.orElse(null);
-
 
 	}
+
 }

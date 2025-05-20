@@ -15,8 +15,6 @@ public class UserResponseDto {
 
 	private final String email;
 
-	private final String password;
-
 	private final String nickname;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
@@ -26,11 +24,10 @@ public class UserResponseDto {
 	private final LocalDateTime updatedAt;
 
 	@Builder
-	public UserResponseDto(Long id, String email, String password, String nickname, LocalDateTime createdAt,
+	public UserResponseDto(Long id, String email, String nickname, LocalDateTime createdAt,
 		LocalDateTime updatedAt) {
 		this.id = id;
 		this.email = email;
-		this.password = password;
 		this.nickname = nickname;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
@@ -40,7 +37,6 @@ public class UserResponseDto {
 		return UserResponseDto.builder()
 			.id(user.getId())
 			.email(user.getEmail())
-			.password(user.getPassword())
 			.nickname(user.getNickname())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())

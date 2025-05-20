@@ -9,11 +9,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
 
-    default User findByIdOrElseThrow(Long id) {
-        return findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-    }
-
     default User findByEmailOrElseThrow(String email) {
         return findByEmail(email)
             .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
@@ -21,5 +16,4 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> findByEmail(String email);
 
-    // Optional<User> findUserById(Long id);
 }

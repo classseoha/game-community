@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class JwtUtil {
 
 	private static final String prefix = "Bearer ";
-	private static final long tokenLife = 24 * 60 * 60 * 1000L;
+	private static final long tokenLife = 60 * 60 * 1000L;
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
@@ -63,14 +63,4 @@ public class JwtUtil {
 			.getBody();
 	}
 
-	public long getIdFromRequest(HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
-		String token = Arrays.stream(cookies)
-			.filter(c -> c.getName().equals("token"))
-			.map(Cookie::getValue)
-			.findFirst()
-			.orElseThrow();
-		Claims claims = getClaims(token);
-		return Long.parseLong(claims.getSubject());
-	}
 }
