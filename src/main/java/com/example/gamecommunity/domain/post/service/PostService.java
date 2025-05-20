@@ -67,7 +67,7 @@ public class PostService {
 	@Transactional(readOnly = true)
 	public Page<PostResponseDto> searchPostByTitle(String title, Pageable pageable) {
 
-		return postRepository.findAllByTitleContaining(title, pageable)
+		return postRepository.findAllByTitleStartingWith(title, pageable)
 			.map(PostResponseDto::new);
 	}
 
@@ -80,7 +80,7 @@ public class PostService {
 	 */
 	public Page<PostResponseDto> searchPostByTitleWithCache(String title, Pageable pageable) {
 
-		return postRepository.findAllByTitleContaining(title, pageable)
+		return postRepository.findAllByTitleStartingWith(title, pageable)
 			.map(PostResponseDto::new);
 	}
 

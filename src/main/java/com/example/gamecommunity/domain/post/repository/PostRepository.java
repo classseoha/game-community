@@ -23,5 +23,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	→ 이번 프로젝트는 제목 검색으로 구현하기로 했기에 간단하게 구현 가능한 JPA 활용
 	→ 여러 조건, 내용 + 제목 검색, 정렬 조건 다양한 경우에는 QueryDSL 사용 추천
 	 */
-	Page<Post> findAllByTitleContaining(String title, Pageable pageable);
+
+	// Page<Post> findAllByTitleContaining(String title, Pageable pageable);
+	// Index 는 접두사 검색일 때만 B-Tree 인덱스 활용하기 때문에 Containing → StartingWith 메서드명 수정
+	Page<Post> findAllByTitleStartingWith(String title, Pageable pageable);
 }
