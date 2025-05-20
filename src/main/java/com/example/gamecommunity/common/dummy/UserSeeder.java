@@ -19,9 +19,9 @@ import java.util.Set;
  * UserSeeder : 개발용 ID 미리 생성(500건) / ApplicationRunner(빠르고 가벼움) / 앱 시작 시 1회 실행 / 단순,소량 데이터
  * PostInsertJob : 부하 테스트용 대량 데이터 생성(100만 건) / Spring Batch Job(병렬처리, chunk 처리) / 앱 시작 시 or REST,스케줄 트리거 가능 / 대량, 병렬, 트랜잭션 관리 필요
  */
-@Component// @DependsOn 실행을 위한 이름 지정
+@Component
 @RequiredArgsConstructor
-public class UserSeeder implements CommandLineRunner { // User 더미 데이터 생성기
+public class UserSeeder implements CommandLineRunner { // User 더미 데이터 생성 + BatchStarter
 
     private final UserRepository userRepository;
     private final JobLauncher jobLauncher;
@@ -74,12 +74,12 @@ public class UserSeeder implements CommandLineRunner { // User 더미 데이터 
         userRepository.saveAll(users);
         System.out.println(neededCount + "명의 User 더미 데이터 생성 완료");
 
-        // 💥 여기서 PostInsertJob을 바로 실행!
+        // 여기서 PostInsertJob을 바로 실행!
         JobParameters params = new JobParametersBuilder()
                 .addLong("startAt", System.currentTimeMillis())
                 .toJobParameters();
 
-        System.out.println("🚀 포스트 배치 작업 실행 시작");
+        System.out.println("포스트 배치 작업 실행 시작");
         jobLauncher.run(postInsertJob, params);
     }
 }

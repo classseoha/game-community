@@ -69,7 +69,7 @@ public class PostInsertJobConfig { // Batch Job에 대해 설정하는 클래스
                     if (userList.isEmpty()) {
                         throw new IllegalStateException("유저가 없습니다. UserSeeder가 먼저 실행되어야 합니다.");
                     }
-                    System.out.println("✅ 유저 수: " + userList.size());
+                    System.out.println("유저 수: " + userList.size());
                 }
 
                 if (count >= TOTAL_COUNT) return null;
