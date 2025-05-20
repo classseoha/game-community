@@ -1,10 +1,11 @@
 package com.example.gamecommunity.domain.user.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.example.gamecommunity.common.entity.BaseEntity;
 import com.example.gamecommunity.domain.post.entity.Post;
+import com.example.gamecommunity.domain.user.dto.requestdto.UserUpdateRequestDto;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,10 +19,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "users")
+@Table(name = "'user'")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
 	@Id
