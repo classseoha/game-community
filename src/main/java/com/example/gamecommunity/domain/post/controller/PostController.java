@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,16 +33,21 @@ public class PostController {
 	private final PostService postService;
 
 	// 1. 게시글 생성
-	@PostMapping("/{userId}/posts")
-	public CommonResponse<PostResponseDto> createPost(@PathVariable Long userId,
-		@RequestBody @Valid PostRequestDto postRequestDto) {
+	@PostMapping("/posts")
+	public CommonResponse<PostResponseDto> createPost(@RequestBody @Valid PostRequestDto postRequestDto) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Long userId = Long.parseLong(authentication.getPrincipal().toString());
 
 		return CommonResponse.of(SuccessCode.CREATE_POST_SUCCESS, postService.savePost(userId, postRequestDto));
 	}
 
 	// 2. 게시글 목록 조회
-	@GetMapping("/{userId}/posts")
-	public CommonResponse<List<PostResponseDto>> getPostList(@PathVariable Long userId) {
+	@GetMapping("/posts")
+	public CommonResponse<List<PostResponseDto>> getPostList() {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Long userId = Long.parseLong(authentication.getPrincipal().toString());
 
 		return CommonResponse.of(SuccessCode.GET_ALL_POSTS_SUCCESS, postService.getAllPosts(userId));
 	}
