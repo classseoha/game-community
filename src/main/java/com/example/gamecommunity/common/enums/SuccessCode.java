@@ -12,9 +12,12 @@ public enum SuccessCode implements BaseCode {
     GET_ALL_POST_SUCCESS(HttpStatus.OK, "일정 목록을 조회합니다."),
     GET_POST_SUCCESS(HttpStatus.FOUND,"일정 상세정보를 조회합니다."),
     UPDATE_POST_SUCCESS(HttpStatus.OK,"일정을 수정했습니다."),
-    DELETE_POST_SUCCESS(HttpStatus.OK, "일정을 삭제했습니다.");
+    DELETE_POST_SUCCESS(HttpStatus.OK, "일정을 삭제했습니다."),
 
 
+
+    // Keyword
+    GET_POPULAR_KEYWORDS_SUCCESS(HttpStatus.OK,"인기 검색어를 조회합니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
