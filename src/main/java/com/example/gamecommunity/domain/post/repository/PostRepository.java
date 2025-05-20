@@ -2,12 +2,13 @@ package com.example.gamecommunity.domain.post.repository;
 
 import java.util.List;
 import java.util.Optional;
+import com.example.gamecommunity.domain.post.entity.Post;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.gamecommunity.domain.post.entity.Post;
 import com.example.gamecommunity.domain.user.entity.User;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -24,4 +25,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	→ 여러 조건, 내용 + 제목 검색, 정렬 조건 다양한 경우에는 QueryDSL 사용 추천
 	 */
 	Page<Post> findAllByTitleContaining(String title, Pageable pageable);
+    List<Post> findByTitleContaining(String keyword);
 }
