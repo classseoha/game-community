@@ -35,10 +35,6 @@ public class RedisConfigure {
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
-    /**
-     * RedisTemplate 설정
-     * @return
-     */
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -58,5 +54,47 @@ public class RedisConfigure {
         // GenericJackson2JsonRedisSerializer 사용해 객체를 JSON으로 직렬화해 저장함
         redisTemplate.setValueSerializer(serializer);
         return redisTemplate;
+//    /**
+//     * RedisTemplate 설정
+//     *
+//     * @return
+//     */
+//    @Bean
+//    public RedisTemplate<String, Object> redisTemplateObject(ObjectMapper redisObjectMapper) {
+//        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(redisObjectMapper);
+//        // 데이터 저장, 조회를 위한 핵심 객체
+//        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+//        // Redis 서버와의 연결 정보 설정, redisConnectionFactory() -> LettuceConnectionFactory 반환
+//        redisTemplate.setConnectionFactory(redisConnectionFactory());
+//        // Redis에 데이터 저장시 어떻게 직렬화할지 지정.
+//        // key를  문자열(utf-8 바이트 배열)로 직렬화 함
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        // GenericJackson2JsonRedisSerializer 사용해 객체를 JSON으로 저장함
+////        redisTemplate.setValueSerializer(new StringRedisSerializer());
+//        redisTemplate.setValueSerializer(serializer);
+//        return redisTemplate;
+//    }
+
+//    /**
+//     * RedisTemplate 설정
+//     *
+//     * @return
+//     */
+//    @Bean
+//    public RedisTemplate<String, HotPostResponseDto> redisTemplate(RedisConnectionFactory redisConnectionFactory, ObjectMapper objectMapper) {
+//        // objectMapper 를 GenericJackson2JsonRedisSerializer에 적용
+//        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+//
+//        // 데이터 저장, 조회를 위한 핵심 객체
+//        RedisTemplate<String, HotPostResponseDto> redisTemplate = new RedisTemplate<>();
+//        // Redis 서버와의 연결 정보 설정, redisConnectionFactory() -> LettuceConnectionFactory 반환
+//        redisTemplate.setConnectionFactory(redisConnectionFactory);
+//        // Redis에 데이터 저장시 어떻게 직렬화할지 지정.
+//        // key를  문자열(utf-8 바이트 배열)로 직렬화 함
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        // GenericJackson2JsonRedisSerializer 사용해 객체를 JSON으로 직렬화해 저장함
+//        redisTemplate.setValueSerializer(serializer);
+//        return redisTemplate;
+//    }
     }
 }
