@@ -1,12 +1,12 @@
 package com.example.gamecommunity.domain.post.service;
 
 import com.example.gamecommunity.common.util.EntityFetcher;
-import com.example.gamecommunity.domain.post.dto.request.HotPostRequestDto;
-import com.example.gamecommunity.domain.post.dto.response.HotPostResponseDto;
+import com.example.gamecommunity.domain.post.dto.response.PostSearchResponseDto;
 import com.example.gamecommunity.domain.post.dto.response.KeywordDto;
 import com.example.gamecommunity.domain.post.entity.Post;
 import com.example.gamecommunity.domain.post.repository.PostRepository;
-import com.example.gamecommunity.domain.user.entity.User;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -21,10 +21,12 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class HotPostService {
+public class PostSearchService {
 
     private final PostRepository postRepository;
     private final EntityFetcher entityFetcher;
+
+    private final ObjectMapper objectMapper;
 
     private final RedisTemplate<String, Object> redisTemplate;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -38,28 +40,37 @@ public class HotPostService {
      * Look - Aside 전략 사용
      */
     @Transactional(readOnly = true)
-    public List<HotPostResponseDto> find(String keyword) {
-        keyword = getKeyword(keyword);
-        String key = "search:result:" + keyword;
-        System.out.println("keyword = " + keyword);
-        System.out.println("redis key = search:result:" + keyword);
+    public List<PostSearchResponseDto> find(String keyword) {
+        String getKeyword = getKeyword(keyword);
 
-        Object cached = redisTemplate.opsForValue().get(key);
+        String setKey = "search:result:" + getKeyword;
+        System.out.println("keyword = " + getKeyword);
+        System.out.println("redis key =" + setKey);
+
+        Object cached = redisTemplate.opsForValue().get(setKey);
         System.out.println("cached = " + cached);
 
         // 캐시 조회
         if (cached != null) {
-            List<HotPostResponseDto> cachedPostList = (List<HotPostResponseDto>) cached;
-            return cachedPostList;
+            try {
+                List<PostSearchResponseDto> cachedPostList = objectMapper.convertValue(
+                        cached, new TypeReference<List<PostSearchResponseDto>>() {
+                        }
+                );
+                return cachedPostList;
+            } catch (Exception e) {
+                System.out.println("error");
+            }
         }
 
         // 캐시에 존재하지 않을 경우 DB 조회
         List<Post> postList = postRepository.findByTitleContaining(keyword);
         System.out.println("postList.size() = " + postList.size());
-        List<HotPostResponseDto> dtoList = postList.stream().map(HotPostResponseDto::from).toList();
+
+        List<PostSearchResponseDto> dtoList = postList.stream().map(PostSearchResponseDto::from).toList();
 
         // Redis에 데이터 저장, TTL 설정 - 10분
-        redisTemplate.opsForValue().set(key, dtoList, Duration.ofMinutes(10));
+        redisTemplate.opsForValue().set(setKey, dtoList, Duration.ofMinutes(5));
         return dtoList;
 
     }
@@ -74,7 +85,15 @@ public class HotPostService {
      */
     @Transactional(readOnly = true)
     public void recodeKeyword(String keyword) {
-        keyword = getKeyword(keyword);
+        // 검색된 키워드
+        String getKeyword = getKeyword(keyword);
+
+        // 키워드가 공백이라면 리턴
+        if(getKeyword.isBlank()){
+            return;
+        }
+
+        // 인기 검색어 저장을 위한 key 생성
         String key = "search:rank:" + LocalDate.now().format(FORMATTER);
 
         // key가 처음 생성될 경우에만 TTL 설정
@@ -83,24 +102,26 @@ public class HotPostService {
         }
 
         // Sorted Set 관련 메서드
-        redisTemplate.opsForZSet().incrementScore(key, keyword, 1);
+        redisTemplate.opsForZSet().incrementScore(key, getKeyword, 1);
     }
 
     /**
      * 인기 검색어 리스트 반환 (TOP 10)
      * key : "search:rank:20250520"
      * value : "keyword"
-     *
      */
     @Transactional(readOnly = true)
     public List<KeywordDto> getKeywords() {
+        // 인기 검색어 key
         String key = "search:rank:" + LocalDate.now().format(FORMATTER);
+
         Set<Object> topKeywordSet = redisTemplate.opsForZSet().reverseRange(key, 0, 9);
 
-        // 키워드가 존재하지 않는 경우
+        // 키워드가 존재하지 않는 경우 빈 리스트 반환
         if (topKeywordSet == null || topKeywordSet.isEmpty()) {
             return List.of();
         }
+
         List<KeywordDto> keywordList = new ArrayList<>();
 
         // 1 ~ 10 순위
