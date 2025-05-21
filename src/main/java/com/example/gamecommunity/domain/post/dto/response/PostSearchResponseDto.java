@@ -8,29 +8,29 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class HotPostResponseDto {
+public class PostSearchResponseDto {
 
     private String title;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public HotPostResponseDto(String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public PostSearchResponseDto(String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public HotPostResponseDto(String title, String content) {
+    public PostSearchResponseDto(String title, String content) {
         this.title = title;
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    public static HotPostResponseDto from(Post post) {
-        return new HotPostResponseDto(
+    public static PostSearchResponseDto from(Post post) {
+        return new PostSearchResponseDto(
                 post.getTitle(),
                 post.getContent(),
                 post.getCreatedAt(),
