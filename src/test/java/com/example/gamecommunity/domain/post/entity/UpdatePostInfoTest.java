@@ -35,4 +35,26 @@ class UpdatePostInfoTest {
 		assertThat(post.getContent()).isEqualTo("수정 내용");
 	}
 
+	@Test
+	void 공백_전달시_값_변경_안됨() {
+
+		// given
+		String title = "제목";
+		String content = "내용";
+		User user = User.builder()
+			.email("테스트 이메일")
+			.password("테스트 비밀번호")
+			.nickname("테스트 유저")
+			.build();
+
+		Post post = new Post(title, content, user);
+
+		// when
+		post.updatePostInfo(" ", " ");
+
+		// then
+		assertThat(post.getTitle()).isEqualTo(title);
+		assertThat(post.getContent()).isEqualTo(content);
+	}
+
 }
