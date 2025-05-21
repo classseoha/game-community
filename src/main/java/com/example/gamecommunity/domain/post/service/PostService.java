@@ -90,7 +90,7 @@ public class PostService {
 
 		Post post = entityFetcher.getPostOrThrow(postId);
 
-		post.update(postRequestDto.getTitle(), postRequestDto.getContent());
+		post.updatePostInfo(postRequestDto.getTitle(), postRequestDto.getContent());
 	}
 
 	// 5. 게시글 삭제
