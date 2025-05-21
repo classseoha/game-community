@@ -30,7 +30,7 @@ class PostEntityFetcherTest {
 		// given
 		Long id = 1L;
 
-		// stubbing
+		// stubbing - 조회 결과가 없는 상황을 시뮬레이션하기 위해 빈 결과를 반환하도록 설정
 		when(postRepository.findById(id)).thenReturn(Optional.empty());
 
 		// when & then
