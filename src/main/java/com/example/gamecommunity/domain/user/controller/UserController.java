@@ -1,27 +1,25 @@
 package com.example.gamecommunity.domain.user.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.gamecommunity.common.enums.ErrorCode;
-import com.example.gamecommunity.common.exception.CustomException;
+import com.example.gamecommunity.common.enums.SuccessCode;
 import com.example.gamecommunity.common.security.JwtUtil;
+import com.example.gamecommunity.domain.user.dto.requestdto.UserDeleteRequesDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserRequestDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserUpdateRequestDto;
 import com.example.gamecommunity.domain.user.dto.responsedto.UserResponseDto;
 import com.example.gamecommunity.domain.user.service.UserService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/users")
@@ -53,13 +51,14 @@ public class UserController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<Void> delete() {
+	public ResponseEntity<String> delete(@RequestBody UserDeleteRequesDto userDeleteRequesDto) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Long userId = Long.parseLong(authentication.getPrincipal().toString());
 
-		userService.delete(userId);
+		userService.delete(userDeleteRequesDto, userId);
 
-		return new ResponseEntity<>(HttpStatus.OK);
+		return ResponseEntity.ok("회원탈퇴가 완료되었습니다.");
+
 	}
 }
