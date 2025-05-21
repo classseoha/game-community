@@ -46,7 +46,7 @@ class PostEntityFetcherTest {
 
 		// given
 		Long id = 1L;
-		Post mockPost =  mock(Post.class);
+		Post mockPost = mock(Post.class);
 		when(postRepository.findById(id)).thenReturn(Optional.of(mockPost));
 
 		// when
