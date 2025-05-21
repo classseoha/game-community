@@ -27,4 +27,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	// Page<Post> findAllByTitleContaining(String title, Pageable pageable);
 	// Index 는 접두사 검색일 때만 B-Tree 인덱스 활용하기 때문에 Containing → StartingWith 메서드명 수정
 	Page<Post> findAllByTitleStartingWith(String title, Pageable pageable);
+
+	// Page<Post> findAllByTitleContaining(keyword);
 }
