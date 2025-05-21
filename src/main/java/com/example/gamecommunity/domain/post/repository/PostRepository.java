@@ -29,4 +29,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	Page<Post> findAllByTitleStartingWith(String title, Pageable pageable);
 
 	// Page<Post> findAllByTitleContaining(keyword);
+
+	// 앞 뒤로 단어 검색 가능하도록 하려면 search 로 할 것
+	// Page<Post> searchByTitle(String title, Pageable pageable);
+
 }
