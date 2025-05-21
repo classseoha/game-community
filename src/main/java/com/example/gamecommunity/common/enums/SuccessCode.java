@@ -6,6 +6,8 @@ public enum SuccessCode implements BaseCode {
 
     // User
     CREATE_USER_SUCCESS(HttpStatus.CREATED,"유저를 생성했습니다."),
+    UPDATE_USER_SUCCESS(HttpStatus.CREATED,"유저를 수정했습니다."),
+    DELETE_USER_SUCCESS(HttpStatus.CREATED,"유저탈퇴가 완료되었습니다."),
 
     // Post
     CREATE_POST_SUCCESS(HttpStatus.CREATED, "게시글이 생성되었습니다."),
