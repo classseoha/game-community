@@ -14,6 +14,7 @@
 - 게시판 CRUD API<br>
 - 검색 API v1(JPA 기반)/v2(In-memory Cache)<br>
 - 페이징 처리 구현
+- Indexing
 
 **박한비 (Redis, 인기 검색어)**<br>
 
