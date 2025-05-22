@@ -124,4 +124,8 @@ public class JwtUtil {
 			.getBody();
 	}
 
+	public long getTokenLife() {
+		return tokenLife;  // tokenLife를 반환
+	}
+
 }

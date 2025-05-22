@@ -67,8 +67,7 @@ public class PostController {
 		@RequestParam("keyword") String title,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-		return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS,
-			postService.searchPostByTitleWithCache(title, pageable));
+		return CommonResponse.of(SuccessCode.SEARCH_POST_SUCCESS, postService.searchPostByTitleWithCache(title, pageable));
 	}
 
 	// 5. 게시글 수정

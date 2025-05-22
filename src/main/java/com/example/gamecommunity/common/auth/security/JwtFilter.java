@@ -55,21 +55,13 @@ public class JwtFilter extends OncePerRequestFilter {
 		 * 모든 인증 절차 후 다음 필터 또는 컨트롤러로 요청 전달
 		 */
 		try {
-
-			// String tokenKey = "BLACKLIST_" + jwt;
-			// if (redisTemplate.hasKey(tokenKey)) {
-			// 	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그아웃된 사용자입니다.");
-			// 	return;
-			// }
-
 			Claims claims = jwtUtil.getClaims(jwt);
 			if (claims == null) {
 				throw new CustomException(ErrorCode.SC_BAD_REQUEST);
 			}
 
-			Authentication authentication = new UsernamePasswordAuthenticationToken(
-				claims.getSubject(), null, List.of()
-			);
+			Authentication authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), null,
+				List.of());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			filterChain.doFilter(request, response);

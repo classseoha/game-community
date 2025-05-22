@@ -1,14 +1,17 @@
 package com.example.gamecommunity.common.auth.service;
 
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.gamecommunity.common.auth.dto.requestdto.SigninRequestDto;
 import com.example.gamecommunity.common.auth.dto.responsedto.SigninResponseDto;
+import com.example.gamecommunity.common.auth.security.JwtUtil;
 import com.example.gamecommunity.common.enums.ErrorCode;
 import com.example.gamecommunity.common.exception.CustomException;
-import com.example.gamecommunity.common.auth.security.JwtUtil;
 import com.example.gamecommunity.domain.user.entity.User;
 import com.example.gamecommunity.domain.user.repository.UserRepository;
 
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
+	private final RedisTemplate<String, Object> redisTemplate;
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 	private final JwtUtil jwtUtil;
@@ -39,8 +43,10 @@ public class AuthService {
 		return new SigninResponseDto(jwtUtil.subStringToken(token));
 	}
 
-	// public void logout(String token){
-	// 	String tokenKey = "BLACKLIST_" + token;
-	// 	redisTemplate.opsForValue().set(tokenKey, "true", tokenExpireTime, TimeUnit.MILLISECONDS);
-	// }
+	public void logout(String token){
+
+		String tokenKey = "BLACKLIST_" + token;
+
+		redisTemplate.opsForValue().set(tokenKey, "true", jwtUtil.getTokenLife(), TimeUnit.MILLISECONDS);
+	}
 }
