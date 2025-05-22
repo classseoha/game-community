@@ -1,7 +1,5 @@
 package com.example.gamecommunity.domain.user.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.gamecommunity.common.auth.security.JwtUtil;
+import com.example.gamecommunity.common.dto.CommonResponse;
+import com.example.gamecommunity.common.enums.SuccessCode;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserDeleteRequesDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserRequestDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserUpdateRequestDto;
@@ -29,16 +29,16 @@ public class UserController {
 	private final JwtUtil jwtUtil;
 
 	@PostMapping("/signup")
-	public ResponseEntity<UserResponseDto> registerUser(
+	public CommonResponse<UserResponseDto> registerUser(
 		@RequestBody UserRequestDto userRequestDto) {
 
 		UserResponseDto userResponseDto = userService.registerUser(userRequestDto);
 
-		return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
+		return CommonResponse.of(SuccessCode.CREATE_USER_SUCCESS, userResponseDto);
 	}
 
 	@PatchMapping
-	public ResponseEntity<UserResponseDto> updateuser(
+	public CommonResponse<UserResponseDto> updateuser(
 		@RequestBody UserUpdateRequestDto userUpdateRequestDto) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -46,18 +46,18 @@ public class UserController {
 
 		UserResponseDto userResponseDto = userService.updateUser(userId, userUpdateRequestDto);
 
-		return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+		return CommonResponse.of(SuccessCode.UPDATE_USER_SUCCESS, userResponseDto);
 	}
 
 	@DeleteMapping
-	public ResponseEntity<String> delete(@RequestBody UserDeleteRequesDto userDeleteRequesDto) {
+	public CommonResponse<Object> delete(@RequestBody UserDeleteRequesDto userDeleteRequesDto) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Long userId = Long.parseLong(authentication.getPrincipal().toString());
 
 		userService.delete(userDeleteRequesDto, userId);
 
-		return ResponseEntity.ok("회원탈퇴가 완료되었습니다.");
+		return CommonResponse.of(SuccessCode.DELETE_USER_SUCCESS);
 
 	}
 }
