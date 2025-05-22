@@ -25,13 +25,13 @@ public class AuthController {
 
 		SigninResponseDto signinResponseDto = authService.login(signinRequestDto);
 
-		String token = signinResponseDto.getToken();
-
 		return ResponseEntity.ok(signinResponseDto);
 	}
 
 	@DeleteMapping("/logout")
-	public ResponseEntity<String> logout(){
+	public ResponseEntity<String> logout(@RequestBody String token){
+
+		// authService.logout(token);
 
 		return ResponseEntity.ok("로그아웃 되었습니다.");
 

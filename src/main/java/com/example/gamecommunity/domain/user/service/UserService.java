@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.gamecommunity.common.enums.ErrorCode;
 import com.example.gamecommunity.common.exception.CustomException;
 import com.example.gamecommunity.common.util.EntityFetcher;
+import com.example.gamecommunity.domain.user.dto.requestdto.UserDeleteRequesDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserRequestDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserUpdateRequestDto;
 import com.example.gamecommunity.domain.user.dto.responsedto.UserResponseDto;
@@ -26,6 +27,14 @@ public class UserService {
 	@Transactional
 	public UserResponseDto registerUser(UserRequestDto userRequestDto) {
 
+		if (userRepository.existsByEmail(userRequestDto.getEmail())) {
+			throw new CustomException(ErrorCode.EXIST_SAME_EMAIL);
+		}
+
+		if (userRepository.existsByNickname(userRequestDto.getNickname())) {
+			throw new CustomException(ErrorCode.EXIST_SAME_NICKNAME);
+		}
+
 		String encodedPassword = passwordEncoder.encode(userRequestDto.getPassword());
 
 		User user = User.builder()
@@ -42,6 +51,10 @@ public class UserService {
 	@Transactional
 	public UserResponseDto updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto) {
 
+		if (userRepository.existsByNickname(userUpdateRequestDto.getNickname())) {
+			throw new CustomException(ErrorCode.EXIST_SAME_NICKNAME);
+		}
+
 		User findUser = entityFetcher.getUserOrThrow(userId);
 
 		if (userUpdateRequestDto.getPassword() != null && !userUpdateRequestDto.getPassword().isEmpty()) {
@@ -57,9 +70,13 @@ public class UserService {
 	}
 
 	@Transactional
-	public void delete(Long userId) {
+	public void delete(UserDeleteRequesDto userDeleteRequesDto, Long userId) {
 
 		User findUser = entityFetcher.getUserOrThrow(userId);
+
+		if (!passwordEncoder.matches(userDeleteRequesDto.getPassword(), findUser.getPassword())) {
+			throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
+		}
 
 		userRepository.delete(findUser);
 	}

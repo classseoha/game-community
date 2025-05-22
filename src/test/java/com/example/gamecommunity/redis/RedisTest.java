@@ -44,7 +44,7 @@ public class RedisTest {
         assertThat(result).isInstanceOf(Post.class);   // 반환 타입 확인
         Post savedPost = (Post) result; // 반환값이 Object로 간주되므로 명시적인 형 변환 필요
         assertThat(savedPost.getTitle()).isEqualTo("제목");
-        assertThat(savedPost.getContents()).isEqualTo("내용");
+        assertThat(savedPost.getContent()).isEqualTo("내용");
 
     }
 }
