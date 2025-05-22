@@ -64,7 +64,7 @@ public class PostSearchService {
         }
 
         // 캐시에 존재하지 않을 경우 DB 조회
-        Page<Post> postList = postRepository.findAllByTitleContaining(keyword, pageable);
+        Page<Post> postList = postRepository.findAllByTitleStartingWith(keyword, pageable);
         List<PostSearchResponseDto> dtoList = postList.stream().map(PostSearchResponseDto::from).toList();
 
         CachedPage cachedPage = CachedPage.from(dtoList, postList);
