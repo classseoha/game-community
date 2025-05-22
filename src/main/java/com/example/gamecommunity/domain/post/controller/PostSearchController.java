@@ -2,10 +2,14 @@ package com.example.gamecommunity.domain.post.controller;
 
 
 import com.example.gamecommunity.common.dto.CommonResponse;
+import com.example.gamecommunity.domain.post.dto.response.CachedPage;
 import com.example.gamecommunity.domain.post.dto.response.PostSearchResponseDto;
 import com.example.gamecommunity.domain.post.dto.response.KeywordDto;
 import com.example.gamecommunity.domain.post.service.PostSearchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +24,13 @@ public class PostSearchController {
     private final PostSearchService postSearchService;
 
     @GetMapping
-    public CommonResponse<List<PostSearchResponseDto>> find(
-            @RequestParam String keyword
+    public CommonResponse<CachedPage> find(
+            @RequestParam String keyword,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         // 인기 검색어 조회를 위한 키워드 저장
         postSearchService.recodeKeyword(keyword);
-        return CommonResponse.of(GET_ALL_POSTS_SUCCESS, postSearchService.find(keyword));
+        return CommonResponse.of(GET_ALL_POSTS_SUCCESS, postSearchService.find(pageable, keyword));
     }
 
     @GetMapping("/rank")
