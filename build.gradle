@@ -29,10 +29,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.github.ben-manes.caffeine:caffeine' // (선택) 성능 좋은 로컬 캐시
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     // Spring Security 추가
-    implementation 'org.springframework.security:spring-security-core'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     // BCryptPasswordEncoder가 포함된 spring-security-core 라이브러리 추가
+    implementation 'org.springframework.security:spring-security-core'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
@@ -40,11 +43,16 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // Spring Batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+    // Java Faker
+    implementation 'net.datafaker:datafaker:2.1.0'
+
+    // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    // jwtUtil 관련 gradle
-
 
     // redis 연동
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
