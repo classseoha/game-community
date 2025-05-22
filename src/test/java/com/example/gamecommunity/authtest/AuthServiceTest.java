@@ -4,7 +4,7 @@ import com.example.gamecommunity.common.auth.dto.requestdto.SigninRequestDto;
 import com.example.gamecommunity.common.auth.dto.responsedto.SigninResponseDto;
 import com.example.gamecommunity.common.auth.service.AuthService;
 import com.example.gamecommunity.common.exception.CustomException;
-import com.example.gamecommunity.common.security.JwtUtil;
+import com.example.gamecommunity.common.auth.security.JwtUtil;
 import com.example.gamecommunity.domain.user.entity.User;
 import com.example.gamecommunity.domain.user.repository.UserRepository;
 

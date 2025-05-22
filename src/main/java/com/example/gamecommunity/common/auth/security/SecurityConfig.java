@@ -1,4 +1,4 @@
-package com.example.gamecommunity.common.security;
+package com.example.gamecommunity.common.auth.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

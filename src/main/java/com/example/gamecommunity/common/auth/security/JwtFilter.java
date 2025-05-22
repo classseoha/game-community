@@ -1,4 +1,4 @@
-package com.example.gamecommunity.common.security;
+package com.example.gamecommunity.common.auth.security;
 
 import java.io.IOException;
 import java.util.List;
