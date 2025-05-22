@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.gamecommunity.common.enums.SuccessCode;
-import com.example.gamecommunity.common.security.JwtUtil;
+import com.example.gamecommunity.common.auth.security.JwtUtil;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserDeleteRequesDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserRequestDto;
 import com.example.gamecommunity.domain.user.dto.requestdto.UserUpdateRequestDto;
