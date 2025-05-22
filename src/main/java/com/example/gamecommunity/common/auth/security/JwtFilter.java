@@ -60,9 +60,8 @@ public class JwtFilter extends OncePerRequestFilter {
 				throw new CustomException(ErrorCode.SC_BAD_REQUEST);
 			}
 
-			Authentication authentication = new UsernamePasswordAuthenticationToken(
-				claims.getSubject(), null, List.of()
-			);
+			Authentication authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), null,
+				List.of());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			filterChain.doFilter(request, response);

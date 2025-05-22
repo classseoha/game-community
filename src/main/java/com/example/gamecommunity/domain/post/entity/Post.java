@@ -2,6 +2,7 @@ package com.example.gamecommunity.domain.post.entity;
 
 import com.example.gamecommunity.common.entity.BaseEntity;
 import com.example.gamecommunity.domain.user.entity.User;
+import jakarta.persistence.*;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,9 +17,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
 @NoArgsConstructor
+@Entity
 @Table(name = "post", indexes = {
 	@Index(name = "idx_post_title", columnList = "title")
 })
@@ -30,6 +31,7 @@ public class Post extends BaseEntity {
 
 	private String title;
 
+    @Column(columnDefinition = "LONGTEXT")
 	private String content;
 
 	@ManyToOne(fetch = FetchType.LAZY)
