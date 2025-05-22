@@ -32,7 +32,7 @@ public class AuthController {
 	@DeleteMapping("/logout")
 	public CommonResponse<Object> logout(@RequestBody String token){
 
-		// authService.logout(token);
+		authService.logout(token);
 
 		return CommonResponse.of(SuccessCode.SUCCESS_USER_LOGOUT);
 
