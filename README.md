@@ -105,7 +105,6 @@
                    ├─config
                    ├─dto
                    ├─dummy
-                   │  └─config
                    ├─entity
                    ├─enums
                    ├─exception
