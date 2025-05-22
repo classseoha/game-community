@@ -38,7 +38,6 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/users/signup", "/error").permitAll()
-                        .requestMatchers("/v1/posts/search", "/v2/posts/search", "/v3/posts/search", "/v3/posts/search/rank").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
