@@ -1,6 +1,6 @@
 package com.example.gamecommunity.domain.post.service;
 
-import com.example.gamecommunity.common.util.EntityFetcher;
+import com.example.gamecommunity.domain.post.dto.response.CachedPage;
 import com.example.gamecommunity.domain.post.dto.response.PostSearchResponseDto;
 import com.example.gamecommunity.domain.post.dto.response.KeywordDto;
 import com.example.gamecommunity.domain.post.entity.Post;
@@ -8,6 +8,8 @@ import com.example.gamecommunity.domain.post.repository.PostRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +26,10 @@ import java.util.Set;
 public class PostSearchService {
 
     private final PostRepository postRepository;
-    private final EntityFetcher entityFetcher;
-
     private final ObjectMapper objectMapper;
 
     private final RedisTemplate<String, Object> redisTemplate;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
-
 
     /**
      * 키워드를 통한 게시글 리스트 반환
@@ -40,38 +39,39 @@ public class PostSearchService {
      * Look - Aside 전략 사용
      */
     @Transactional(readOnly = true)
-    public List<PostSearchResponseDto> find(String keyword) {
+    public CachedPage find(Pageable pageable, String keyword) {
         String getKeyword = getKeyword(keyword);
 
-        String setKey = "search:result:" + getKeyword;
+        String setKey = "search:result:" + getKeyword + ":page:" + pageable.getPageNumber();
         System.out.println("keyword = " + getKeyword);
         System.out.println("redis key =" + setKey);
 
         Object cached = redisTemplate.opsForValue().get(setKey);
         System.out.println("cached = " + cached);
+        System.out.println("Redis 연결 정보: " + redisTemplate.getConnectionFactory().getConnection().ping());
 
         // 캐시 조회
         if (cached != null) {
             try {
-                List<PostSearchResponseDto> cachedPostList = objectMapper.convertValue(
-                        cached, new TypeReference<List<PostSearchResponseDto>>() {
+                CachedPage cachedPage = objectMapper.convertValue(
+                        cached, new TypeReference<CachedPage>() {
                         }
                 );
-                return cachedPostList;
+                return cachedPage;
             } catch (Exception e) {
                 System.out.println("error");
             }
         }
 
         // 캐시에 존재하지 않을 경우 DB 조회
-        List<Post> postList = postRepository.findByTitleContaining(keyword);
-        System.out.println("postList.size() = " + postList.size());
-
+        Page<Post> postList = postRepository.findAllByTitleStartingWith(keyword, pageable);
         List<PostSearchResponseDto> dtoList = postList.stream().map(PostSearchResponseDto::from).toList();
 
+        CachedPage cachedPage = CachedPage.from(dtoList, postList);
+
         // Redis에 데이터 저장, TTL 설정 - 10분
-        redisTemplate.opsForValue().set(setKey, dtoList, Duration.ofMinutes(5));
-        return dtoList;
+        redisTemplate.opsForValue().set(setKey, cachedPage, Duration.ofMinutes(5));
+        return cachedPage;
 
     }
 
@@ -89,7 +89,7 @@ public class PostSearchService {
         String getKeyword = getKeyword(keyword);
 
         // 키워드가 공백이라면 리턴
-        if(getKeyword.isBlank()){
+        if (getKeyword.isBlank()) {
             return;
         }
 

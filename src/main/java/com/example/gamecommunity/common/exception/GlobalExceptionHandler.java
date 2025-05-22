@@ -29,4 +29,11 @@ public class GlobalExceptionHandler {
                         e.getBindingResult().getFieldError().getDefaultMessage()));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<CommonResponse<Object>> handle(Exception e){
+        log.error("error",e.getMessage());
+        return ResponseEntity
+                .status(500)
+                .body(null);
+    }
 }
