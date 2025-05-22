@@ -13,6 +13,7 @@ import com.example.gamecommunity.domain.user.repository.UserRepository;
 
 class UpdatePostInfoTest {
 
+	// Test - 수정 후 re테스트 필요
 	@Test
 	void 유효값_전달시_필드_업데이트() {
 
@@ -35,6 +36,7 @@ class UpdatePostInfoTest {
 		assertThat(post.getContent()).isEqualTo("수정 내용");
 	}
 
+	// Test - 수정 후 re테스트 필요
 	@Test
 	void 공백_전달시_값_변경_안됨() {
 
