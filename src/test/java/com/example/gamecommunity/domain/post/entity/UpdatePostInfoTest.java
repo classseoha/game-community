@@ -22,6 +22,9 @@ class UpdatePostInfoTest {
 		assertThat(post.getContent()).isEqualTo("수정 내용");
 	}
 
+	/* TODO
+	Test failed - 수정 필요
+	 */
 	@Test
 	void 공백_전달시_값_변경_안됨() {
 
