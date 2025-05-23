@@ -3,11 +3,13 @@ package com.example.gamecommunity.common.auth.controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.gamecommunity.common.auth.dto.requestdto.SigninRequestDto;
 import com.example.gamecommunity.common.auth.dto.responsedto.SigninResponseDto;
+import com.example.gamecommunity.common.auth.security.JwtUtil;
 import com.example.gamecommunity.common.auth.service.AuthService;
 import com.example.gamecommunity.common.dto.CommonResponse;
 import com.example.gamecommunity.common.enums.SuccessCode;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final AuthService authService;
+	private final JwtUtil jwtUtil;
 
 	@PostMapping("/login")
 	public CommonResponse<SigninResponseDto> login(@RequestBody SigninRequestDto signinRequestDto){
@@ -30,11 +33,10 @@ public class AuthController {
 	}
 
 	@DeleteMapping("/logout")
-	public CommonResponse<Object> logout(@RequestBody String token){
-
+	public CommonResponse<Object> logout(@RequestHeader("Authorization") String bearerToken){
+		String token = jwtUtil.subStringToken(bearerToken);
 		authService.logout(token);
-
 		return CommonResponse.of(SuccessCode.SUCCESS_USER_LOGOUT);
-
 	}
+
 }
