@@ -26,7 +26,9 @@ class CacheEvictionServiceTest {
         // 캐시 데이터 삽입
         redisTemplate.opsForValue().set("search:result:test1:page:0", "cached-data-1");
         redisTemplate.opsForValue().set("search:result:test2:page:0", "cached-data-2");
-        redisTemplate.opsForValue().set("search:rank:20250523", "rank-data"); // 삭제되면 안 됨
+        // 타입 충돌 방지 (정확한 구조로 저장)
+        redisTemplate.opsForZSet().add("search:rank:20250523", "롤", 1);
+
     }
 
     @Test
