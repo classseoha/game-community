@@ -1,34 +1,18 @@
 package com.example.gamecommunity.domain.post.entity;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
-import com.example.gamecommunity.common.util.EntityFetcher;
 import com.example.gamecommunity.domain.user.entity.User;
-import com.example.gamecommunity.domain.user.repository.UserRepository;
 
 class UpdatePostInfoTest {
 
-	/* TODO
-	Test - 수정 후 re테스트 필요
-	 */
 	@Test
 	void 유효값_전달시_필드_업데이트() {
 
 		// given
-		String title = "제목";
-		String content = "내용";
-		User user = User.builder()
-			.email("테스트 이메일")
-			.password("테스트 비밀번호")
-			.nickname("테스트 유저")
-			.build();
-
-		Post post = new Post(title, content, user);
+		Post post = new Post("제목", "내용", createTestUser());
 
 		// when
 		post.updatePostInfo("수정 제목", "수정 내용");
@@ -38,29 +22,28 @@ class UpdatePostInfoTest {
 		assertThat(post.getContent()).isEqualTo("수정 내용");
 	}
 
-	/* TODO
-	Test - 수정 후 re테스트 필요
-	 */
 	@Test
 	void 공백_전달시_값_변경_안됨() {
 
 		// given
-		String title = "제목";
-		String content = "내용";
-		User user = User.builder()
-			.email("테스트 이메일")
-			.password("테스트 비밀번호")
-			.nickname("테스트 유저")
-			.build();
-
-		Post post = new Post(title, content, user);
+		String originalTitle = "제목";
+		String originalContent = "내용";
+		Post post = new Post(originalTitle, originalContent, createTestUser());
 
 		// when
 		post.updatePostInfo(" ", " ");
 
 		// then
-		assertThat(post.getTitle()).isEqualTo(title);
-		assertThat(post.getContent()).isEqualTo(content);
+		assertThat(post.getTitle()).isEqualTo(originalTitle);
+		assertThat(post.getContent()).isEqualTo(originalContent);
 	}
 
+	// 테스트용 사용자 생성 메서드
+	private User createTestUser() {
+		return User.builder()
+			.email("테스트 이메일")
+			.password("테스트 비밀번호")
+			.nickname("테스트 유저")
+			.build();
+	}
 }
