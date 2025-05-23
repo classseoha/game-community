@@ -49,4 +49,5 @@ class UpdatePostInfoTest {
 			.nickname("테스트 유저")
 			.build();
 	}
+
 }
