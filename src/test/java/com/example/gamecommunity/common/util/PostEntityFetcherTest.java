@@ -34,7 +34,7 @@ class PostEntityFetcherTest {
 		Long id = 1L;
 
 		// stubbing - 조회 결과가 없는 상황을 시뮬레이션하기 위해 빈 결과를 반환하도록 설정
-		when(postRepository.findById(id)).thenReturn(Optional.empty());
+		when(postRepository.findPostById(id)).thenReturn(Optional.empty());
 
 		// when & then
 		assertThatThrownBy(() -> entityFetcher.getPostOrThrow(id)) // assertThatThrownBy : 예외 검증
@@ -53,7 +53,7 @@ class PostEntityFetcherTest {
 		// given
 		Long id = 1L;
 		Post mockPost = mock(Post.class);
-		when(postRepository.findById(id)).thenReturn(Optional.of(mockPost));
+		when(postRepository.findPostById(id)).thenReturn(Optional.of(mockPost));
 
 		// when
 		Post result = entityFetcher.getPostOrThrow(id);
