@@ -17,7 +17,7 @@ import java.util.Set;
 
 /*
  * UserSeeder : 개발용 ID 미리 생성(500건) / ApplicationRunner(빠르고 가벼움) / 앱 시작 시 1회 실행 / 단순,소량 데이터
- * PostInsertJob : 부하 테스트용 대량 데이터 생성(100만 건) / Spring Batch Job(병렬처리, chunk 처리) / 앱 시작 시 or REST,스케줄 트리거 가능 / 대량, 병렬, 트랜잭션 관리 필요
+ * PostInsertJob : 부하 테스트용 대량 데이터 생성(100만 건) / Spring Batch Job(병렬처리, chunk 처리) / 앱 시작 시 or REST,스케줄 트리거 가능 / 대량, 병렬, 트랜잭션 관리 필요 시
  */
 @Component
 @RequiredArgsConstructor
