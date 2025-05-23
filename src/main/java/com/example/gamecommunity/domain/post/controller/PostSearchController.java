@@ -23,6 +23,14 @@ public class PostSearchController {
 
     private final PostSearchService postSearchService;
 
+    /**
+     * 키워드로 게시글 리스트 검색
+     * 페이징 적용
+     * Redis 적용
+     * @param keyword String = "keyword"
+     * @param pageable
+     * @return
+     */
     @GetMapping
     public CommonResponse<CachedPage> find(
             @RequestParam String keyword,
@@ -33,9 +41,12 @@ public class PostSearchController {
         return CommonResponse.of(GET_ALL_POSTS_SUCCESS, postSearchService.find(pageable, keyword));
     }
 
+    /**
+     * 인기 검색어 TOP 10 조회
+     * @return
+     */
     @GetMapping("/rank")
     public CommonResponse<List<KeywordDto>> getKeywords() {
-        System.out.println("topic controller");
         return CommonResponse.of(GET_POPULAR_KEYWORDS_SUCCESS, postSearchService.getKeywords());
     }
 }
