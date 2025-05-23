@@ -59,7 +59,7 @@
 ![Image](https://github.com/user-attachments/assets/ecb77b3f-320e-465c-9809-284182d809c3)
 ![Image](https://github.com/user-attachments/assets/9a9d1ac9-dbcb-4b3c-bef4-7731990e7263)
 
-* Redis
+* Search (Redis 적용)
 ![Image](https://github.com/user-attachments/assets/76a72bc2-85e9-430c-bc9d-153fde40907a)
 
 <br>
