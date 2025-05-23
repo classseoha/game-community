@@ -118,3 +118,6 @@
 ```
 <br>
 <br>
+
+## 🔗 관련 링크
+- 📄 [검색 API에 Cache를 적용한 이유](https://velog.io/@gksql0801/%EA%B2%80%EC%83%89%EA%B8%B0%EB%8A%A5%EC%97%90-%EC%BA%90%EC%8B%9C%EB%A5%BC-%EC%A0%81%EC%9A%A9%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0)

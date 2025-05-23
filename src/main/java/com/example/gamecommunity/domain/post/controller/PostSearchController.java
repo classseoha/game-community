@@ -3,7 +3,6 @@ package com.example.gamecommunity.domain.post.controller;
 
 import com.example.gamecommunity.common.dto.CommonResponse;
 import com.example.gamecommunity.domain.post.dto.response.CachedPage;
-import com.example.gamecommunity.domain.post.dto.response.PostSearchResponseDto;
 import com.example.gamecommunity.domain.post.dto.response.KeywordDto;
 import com.example.gamecommunity.domain.post.service.PostSearchService;
 import lombok.RequiredArgsConstructor;
