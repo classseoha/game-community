@@ -1,12 +1,12 @@
 # Game Commnunity Project
 
 ## 📌 프로젝트 소개
+
 게임 유저들을 위한 커뮤니티 플랫폼으로, 사용자들이 게시글을 작성하고 검색할 수 있는 기능을 제공합니다.<br>
 검색 성능을 고려한 인덱스 설계와 Redis 기반 캐시 적용을 고려한 구조로 설계된 웹 애플리케이션입니다.
 
  
 <br>
-
 
 ## 📌 역할 분담
 
@@ -41,20 +41,21 @@
 
 <br>
 
-
-
 ## 📌 ERD
+
 ![Image](https://github.com/user-attachments/assets/6050a525-4c58-4b86-9e43-69ab46e4643f)
 
 <br>
 
 ## 📌 와이어 프레임
+
 <img width="774" alt="Image" src="https://github.com/user-attachments/assets/cac5b504-9b5b-4986-915c-b4bb10b8721e" />
 
 <br>
 <br>
 
 ## 📌 API 명세서
+
 * Post
 ![Image](https://github.com/user-attachments/assets/5c8918e1-0c34-42e9-ae41-9503151904a3)
 
@@ -68,6 +69,7 @@
 <br>
 
 ## 📌 주요 기능
+
 ### Post 도메인
 - 게시글 작성, 조회, 수정, 삭제 기능 제공
 - 게시글 제목 검색 기능 제공 (title LIKE 기반), 검색 결과에 캐시 적용
@@ -96,11 +98,13 @@
 <br>
 
 ## 📌 개발 환경 및 기술 스택
+
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=OpenJDK&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"> <img src="https://img.shields.io/badge/Faker-FF6F61?style=for-the-badge&logoColor=white"> <img src="https://img.shields.io/badge/Batch-0078D6?style=for-the-badge&logo=windows&logoColor=white">
 
 <br>
 
 ## 📌 프로젝트 구조
+
 ```bas      
 📁 OutsourcingProject
             └─ common
