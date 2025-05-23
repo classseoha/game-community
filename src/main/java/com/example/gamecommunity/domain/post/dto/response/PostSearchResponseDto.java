@@ -15,18 +15,11 @@ public class PostSearchResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public PostSearchResponseDto(String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private PostSearchResponseDto(String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public PostSearchResponseDto(String title, String content) {
-        this.title = title;
-        this.content = content;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
     public static PostSearchResponseDto from(Post post) {

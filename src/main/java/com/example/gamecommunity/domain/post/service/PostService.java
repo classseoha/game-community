@@ -23,83 +23,87 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostService {
 
-	private final EntityFetcher entityFetcher;
-	private final PostRepository postRepository;
+    private final EntityFetcher entityFetcher;
+    private final PostRepository postRepository;
 
-	// 1. 게시글 생성
-	@Transactional
-	public PostResponseDto savePost(Long userId, PostRequestDto postRequestDto) {
+    // 캐시 무효화 메서드
+    private final CacheEvictionService cacheEvictionService;
 
-		User user = entityFetcher.getUserOrThrow(userId);
+    // 1. 게시글 생성
+    @Transactional
+    public PostResponseDto savePost(Long userId, PostRequestDto postRequestDto) {
 
-		Post post = Post.builder()
-			.title(postRequestDto.getTitle())
-			.content(postRequestDto.getContent())
-			.user(user)
-			.build();
+        User user = entityFetcher.getUserOrThrow(userId);
 
-		Post savedPost = postRepository.save(post);
+        Post post = Post.builder()
+                .title(postRequestDto.getTitle())
+                .content(postRequestDto.getContent())
+                .user(user)
+                .build();
 
-		return new PostResponseDto(savedPost);
+        Post savedPost = postRepository.save(post);
 
-	}
+        cacheEvictionService.clearAllSearchCache(); // 게시글 조회 캐시 전체 삭제
+        return new PostResponseDto(savedPost);
 
-	// 2. 게시글 목록 조회
-	@Transactional(readOnly = true)
-	public List<PostResponseDto> getAllPosts(Long userId) {
+    }
 
-		User user = entityFetcher.getUserOrThrow(userId);
+    // 2. 게시글 목록 조회
+    @Transactional(readOnly = true)
+    public List<PostResponseDto> getAllPosts(Long userId) {
 
-		List<Post> postList = postRepository.findAllByUser(user);
+        User user = entityFetcher.getUserOrThrow(userId);
 
-		if (postList.isEmpty()) {
-			throw new CustomException(ErrorCode.POST_NOT_FOUND, "게시글을 찾을 수 없습니다.");
-		}
+        List<Post> postList = postRepository.findAllByUser(user);
 
-		List<PostResponseDto> postResponseDtoList = postList.stream()
-			.map(post -> new PostResponseDto(post))
-			.toList();
+        if (postList.isEmpty()) {
+            throw new CustomException(ErrorCode.POST_NOT_FOUND, "게시글을 찾을 수 없습니다.");
+        }
 
-		return postResponseDtoList;
-	}
+        List<PostResponseDto> postResponseDtoList = postList.stream()
+                .map(post -> new PostResponseDto(post))
+                .toList();
 
-	// 3. 게시글 검색 조회 v1
-	@Transactional(readOnly = true)
-	public Page<PostResponseDto> searchPostByTitle(String title, Pageable pageable) {
+        return postResponseDtoList;
+    }
 
-		return postRepository.findAllByTitleStartingWith(title, pageable)
-			.map(PostResponseDto::new);
-	}
+    // 3. 게시글 검색 조회 v1
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> searchPostByTitle(String title, Pageable pageable) {
 
-	// 4. 게시글 검색 조회 v2 (캐시 기반)
-	@Transactional(readOnly = true)
-	@Cacheable(value = "searchPost", key = "#title")
+        return postRepository.findAllByTitleStartingWith(title, pageable)
+                .map(PostResponseDto::new);
+    }
+
+    // 4. 게시글 검색 조회 v2 (캐시 기반)
+    @Transactional(readOnly = true)
+    @Cacheable(value = "searchPost", key = "#title")
 	/*
 	검색할 때 세부 설정 넣는 방법
 	@Cacheable(value = "searchPosts", key = "#title + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
 	 */
-	public Page<PostResponseDto> searchPostByTitleWithCache(String title, Pageable pageable) {
+    public Page<PostResponseDto> searchPostByTitleWithCache(String title, Pageable pageable) {
 
-		return postRepository.findAllByTitleStartingWith(title, pageable)
-			.map(PostResponseDto::new);
-	}
+        return postRepository.findAllByTitleStartingWith(title, pageable)
+                .map(PostResponseDto::new);
+    }
 
-	// 4. 게시글 수정
-	@Transactional
-	public void editPost(Long postId, PostRequestDto postRequestDto) {
+    // 4. 게시글 수정
+    @Transactional
+    public void editPost(Long postId, PostRequestDto postRequestDto) {
 
-		Post post = entityFetcher.getPostOrThrow(postId);
+        Post post = entityFetcher.getPostOrThrow(postId);
 
-		post.updatePostInfo(postRequestDto.getTitle(), postRequestDto.getContent());
-	}
+        post.updatePostInfo(postRequestDto.getTitle(), postRequestDto.getContent());
+    }
 
-	// 5. 게시글 삭제
-	@Transactional
-	public void deletePost(Long postId) {
+    // 5. 게시글 삭제
+    @Transactional
+    public void deletePost(Long postId) {
 
-		Post post = entityFetcher.getPostOrThrow(postId);
+        Post post = entityFetcher.getPostOrThrow(postId);
 
-		postRepository.delete(post);
-	}
+        postRepository.delete(post);
+    }
 
 }
