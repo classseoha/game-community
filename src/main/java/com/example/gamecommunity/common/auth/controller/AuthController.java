@@ -37,6 +37,7 @@ public class AuthController {
 		String token = jwtUtil.subStringToken(bearerToken);
 		authService.logout(token);
 		return CommonResponse.of(SuccessCode.SUCCESS_USER_LOGOUT);
+
 	}
 
 }
