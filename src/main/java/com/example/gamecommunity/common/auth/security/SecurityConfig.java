@@ -1,7 +1,5 @@
 package com.example.gamecommunity.common.auth.security;
 
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -14,6 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+
 @Configuration // Bean 등록
 @EnableWebSecurity // Spring Security의 웹 보안 지원 활성화
 // @PreAuthorize, @PostAuthorize, @Secured 등의 애너테이션 기반 권한 처리를 활성화
@@ -21,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
+    private final JwtFilter jwtFilter;
 
     /**
      * CSRF 보호 기능의 활성화 여부 - http.csrf
@@ -47,7 +48,7 @@ public class SecurityConfig {
                             response.getWriter().write("{\"status\":401,\"message\":\"인증이 필요합니다.\"}");
                         })
                 )
-                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -59,10 +60,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // JWT 인증 필터를 등록
-    @Bean
-    public JwtFilter jwtFilter() {
-        return new JwtFilter(jwtUtil);
-
-    }
 }

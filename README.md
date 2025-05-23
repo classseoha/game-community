@@ -1,10 +1,10 @@
 # Game Commnunity Project
 
 ## 📌 프로젝트 소개
-게임 유저들을 위한 커뮤니티 플랫폼으로, 사용자들이 게시글을 작성하고 검색할 수 있는 기능을 제공합니다.
+게임 유저들을 위한 커뮤니티 플랫폼으로, 사용자들이 게시글을 작성하고 검색할 수 있는 기능을 제공합니다.<br>
 검색 성능을 고려한 인덱스 설계와 Redis 기반 캐시 적용을 고려한 구조로 설계된 웹 애플리케이션입니다.
 
-
+ 
 <br>
 
 ## 📌 역할 분담
@@ -14,6 +14,7 @@
 - 게시판 CRUD API<br>
 - 검색 API v1(JPA 기반)/v2(In-memory Cache)<br>
 - 페이징 처리 구현
+- Indexing
 
 **박한비 (Redis, 인기 검색어)**<br>
 
@@ -36,6 +37,8 @@
 - JWT, 시큐리티 적용
 
 <br>
+
+
 
 ## 📌 ERD
 ![Image](https://github.com/user-attachments/assets/6050a525-4c58-4b86-9e43-69ab46e4643f)
@@ -62,23 +65,18 @@
 <br>
 
 ## 📌 주요 기능
-### 유저 도메인
-- 유저 회원가입, 로그인, 회원 조회, 회원정보 수정, 회원 탈퇴
-- 회원가입 api를 자동 로그인으로 구현하여, 회원가입 또는 로그인 api를 실행하면 JWT 토큰을 발급 받아 로그인 상태를 유지할 수 있습니다.<br>
-### 가게 도메인
-- 가게 생성, 가게 조회, 가게 수정, 가게 삭제
-- JWT에서 로그인한 유저의 권한(일반 사용자 권한, 가게 운영자 권한)을 추출하여, 가게 운영자 권한을 가진 유저만 가게 생성, 가게 수정, 가게 삭제를 할 수 있습니다.<br>
-### 메뉴 도메인
-- 메뉴 생성, 메뉴 조회, 메뉴 수정, 메뉴 삭제
-- JWT에서 로그인한 유저의 권한(일반 사용자 권한, 가게 운영자 권한)을 추출하여, 가게 운영자 권한을 가진 유저만 메뉴 생성, 메뉴 수정, 메뉴 삭제를 할 수 있습니다.<br>
-### 주문 도메인
-- 주문 요청, 주문 조회, 주문 상태 변경, 주문 삭제
-- JWT에서 로그인한 유저의 권한(일반 사용자 권한, 가게 운영자 권한)을 추출하여, 가게 운영자 권한을 가진 유저는 주문 조회, 주문 수정, 주문 삭제를 할 수 있습니다.
-- 일반 사용자 권한을 가진 유저는 주문 요청, 주문 조회, 주문 삭제를 할 수 있습니다.<br>
-### 리뷰 도메인
-- 리뷰 생성, 리뷰 답글(사장님 권한), 리뷰 조회, 리뷰 삭제
-- JWT에서 로그인한 유저의 권한(일반 사용자 권한, 가게 운영자 권한)을 추출하여, 일반 사용자 권한을 가진 유저 중에 주문을 생성한 유저만 리뷰 생성, 리뷰 수정, 리뷰 삭제를 할 수 있습니다.
-- 가게 운영자 권한을 가진 유저만 주문 조회, 주문 수정, 주문 삭제를 할 수 있습니다.<br>
+### Post 도메인
+- 게시글 작성, 조회, 수정, 삭제 기능 제공
+- 게시글 제목 검색 기능 제공 (title LIKE 기반), 검색 결과에 캐시 적용
+- `@Cacheable`을 사용하여 제목 검색 시 캐시 자동 적용, 응답 속도 향상
+- 게시글 수정 및 삭제는 작성자 본인만 가능하도록 권한 제어<br>
+### User 도메인
+- 유저 회원가입, 로그인, 회원 정보 수정, 회원 탈퇴 기능
+- 회원가입 또는 로그인 시 JWT 토큰을 발급받아 인증 상태 유지 가능
+- JWT 토큰 기반으로 사용자 인증 및 게시글 권한 검증 수행<br>
+### Redis 캐시
+- 자주 검색되는 게시글 검색 결과에 대해 Spring Cache + Redis 적용
+- 게시글 생성/수정/삭제 시 관련 캐시를 자동 삭제하여 일관성 유지
 
 <br>
 
@@ -91,11 +89,11 @@
 * Comment : 주석 수정 및 삭제
 * Docs : 문서와 관련된 모든 것
 * Chore : 빌드 설정 변경 및 기타 환경설정
-
+ 
 <br>
 
 ## 📌 개발 환경 및 기술 스택
-<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=OpenJDK&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> 
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=OpenJDK&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"> <img src="https://img.shields.io/badge/Faker-FF6F61?style=for-the-badge&logoColor=white"> <img src="https://img.shields.io/badge/Batch-0078D6?style=for-the-badge&logo=windows&logoColor=white">
 
 <br>
 
@@ -108,7 +106,6 @@
                    ├─config
                    ├─dto
                    ├─dummy
-                   │  └─config
                    ├─entity
                    ├─enums
                    ├─exception
@@ -121,12 +118,3 @@
 ```
 <br>
 <br>
-
-
-
------
------
- 향후 Elasticsearch 확장성
-
-
-

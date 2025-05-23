@@ -24,6 +24,9 @@ class PostEntityFetcherTest {
 	@InjectMocks
 	private EntityFetcher entityFetcher;
 
+	/* TODO
+	Test - 수정 후 re테스트 필요
+	 */
 	@Test
 	void 일치하는_게시글id_없으면_CustomException() {
 
@@ -41,6 +44,9 @@ class PostEntityFetcherTest {
 
 	}
 
+	/* TODO
+	Test - 수정 후 re테스트 필요
+	 */
 	@Test
 	void 일치하는_게시글id_있으면_정상_반환() {
 
